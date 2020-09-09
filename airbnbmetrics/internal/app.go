@@ -58,4 +58,11 @@ func (app *App) Run() {
 		fmt.Println("Falló al filtrar por precio")
 	}
 	fmt.Println("La cantidad de listings con precio mayor a " + minPriceStr + " es ", len(filteredListings))
+
+	fmt.Println("Calculando score de los listings...")
+	scoredListings, scoredListingsErr := app.listingService.GetAllScored()
+	if scoredListingsErr != nil{
+		fmt.Println("Falló en calcular el score para los listings")
+	}
+	fmt.Println(fmt.Sprintf("%+v", scoredListings[0]))
 }

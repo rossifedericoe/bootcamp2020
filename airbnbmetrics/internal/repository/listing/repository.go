@@ -46,3 +46,22 @@ func (repository *ListingRepositoryImpl) GetByMinPrice(minPrice primitive.Decima
 	}
 	return listings, nil
 }
+
+func (repository *ListingRepositoryImpl) GetAll() ([]listing.Listing, error){
+	filter := bson.M{}
+
+	cursor, err := repository.client.Database("sample_airbnb").
+		Collection("listingsAndReviews").
+		Find(context.TODO(), filter)
+	if err != nil {
+		return nil, err
+	}
+
+	var listings []listing.Listing
+	for cursor.Next(context.TODO()) {
+		var listingFound listing.Listing
+		cursor.Decode(&listingFound)
+		listings = append(listings, listingFound)
+	}
+	return listings, nil
+}
